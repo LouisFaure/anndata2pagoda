@@ -14,8 +14,9 @@ pip install git+https://github.com/LouisFaure/anndata2pagoda.git
 ### In python
 ```python
 import scanpy as sc
-sc.read("adata.h5ad")
 from anndata2pagoda import pagoda2web
+
+adata = sc.read("adata.h5ad")
 pagoda2web(adata)
 ```
 
