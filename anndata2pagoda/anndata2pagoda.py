@@ -51,7 +51,7 @@ def _dict_to_rlist(dd):
 
 def pagoda2web(adata,
              layer=None,
-             use_rep="UMAP",
+             use_rep="X_umap",
              key_to_include=["leiden"],
              title="p2w",
              filename="p2w.bin"):
@@ -85,6 +85,13 @@ def pagoda2web(adata,
     adata = py2rpy(adata)
         
     palettes = _dict_to_rlist(palettes)
+    
+    if use_rep=="X_umap":
+        use_rep="UMAP"
+    if use_rep=="X_tsne":
+        use_rep="TSNE"
+    elif use_rep=="X_pca":
+        use_rep="PCA"
     
     to_p2w(adata,use_rep,palettes,title,filename)
     
