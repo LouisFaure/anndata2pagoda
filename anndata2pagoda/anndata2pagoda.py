@@ -70,12 +70,19 @@ def pagoda2web(adata,
         adata.obs["leiden_noname"]=adata.obs.leiden.cat.rename_categories(range(len(adata.obs.leiden.cat.categories)))
         leiden = "leiden_noname"
     
-    adata.obs[leiden]=adata.obs[leiden].cat.rename_categories((adata.obs[leiden].cat.categories.astype(int)+1).astype(str))
+    if adata.obs[leiden].cat.categories.astype(int).min()==0:
+        cl = adata.obs[leiden].cat.categories.astype(int)+1
+    elif adata.obs[leiden].cat.categories.astype(int).min()==1:
+        cl = adata.obs[leiden].cat.categories.astype(int)
+    else:
+        raise Exception("clustering does not start with zero or one!")
+    adata.obs[leiden]=adata.obs[leiden].cat.rename_categories(cl.astype(str))
 
     
     palettes = {}
     for key in key_to_include:
-        palettes[key] = adata.uns[key+"_colors"].tolist()
+        kcol = adata.uns[key+"_colors"]
+        palettes[key] = kcol.tolist() if type(kcol) != list else kcol
         
     if layer is not None:
         adata.X = adata.layers[layer].copy()
